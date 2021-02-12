@@ -69,6 +69,7 @@ A simple test suite wrapper that executes tests based on yaml test configuration
         [--custom-config <key>=<value>]...
         [--custom-config-file <file>]
         [--xunit-results]
+        [--enable-eus]
   run.py --cleanup=name [--osp-cred <file>]
         [--log-level <LEVEL>]
 
@@ -114,6 +115,7 @@ Options:
   -c --custom-config <name>=<value> Add a custom config key/value to ceph_conf_overrides
   --custom-config-file <file>       Add custom config yaml to ceph_conf_overrides
   --xunit-results                   Create xUnit result file for test suite run [default: false]
+  --enable-eus                      Enable EUS [default: false]
 """
 log = logging.getLogger(__name__)
 root = logging.getLogger()
@@ -247,6 +249,7 @@ def run(args):
     custom_config = args.get("--custom-config")
     custom_config_file = args.get("--custom-config-file")
     xunit_results = args.get("--xunit-results", False)
+    enable_eus = args.get("--enable-eus", False)
 
     # Set log directory and get absolute path
     run_id = timestamp()
@@ -598,6 +601,7 @@ def run(args):
                 repo = args.get("--add-repo")
                 if repo.startswith("http"):
                     config["add-repo"] = repo
+            config["enable_eus"] = enable_eus
             config["docker-insecure-registry"] = docker_insecure_registry
             config["skip_version_compare"] = skip_version_compare
             config["container_image"] = None
